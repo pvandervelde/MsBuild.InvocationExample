@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project
+    ToolsVersion="11.0"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <Target Name="LoadTemplates">
+        <CallTarget Targets="LoadTemplates_LoadFromFile" />
+        <CallTarget Targets="LoadTemplates_CreateItems" />
+    </Target>
+
+    <Target Name="LoadTemplates_LoadFromFile">
+
+        <ReadLinesFromFile
+            Condition="Exists('$(MSBuildThisFileDirectory)bin\file1.txt')"
+            File="$(MSBuildThisFileDirectory)bin\file1.txt" >
+            <Output
+                TaskParameter="Lines"
+                ItemName="ItemsFromFile"/>
+        </ReadLinesFromFile>
+    </Target>
+
+    <Target
+        Condition=" '@(ItemsFromFile)' != '' "
+        Name="LoadTemplates_CreateItems"
+        Outputs="%(ItemsFromFile.Identity)">
+
+        <PropertyGroup>
+            <SingleLine>%(ItemsFromFile.Identity)</SingleLine>
+            <FirstArgument>$(SingleLine.SubString(0, $(SingleLine.IndexOf('='))))</FirstArgument>
+            <SecondArgument>$(SingleLine.SubString($(SingleLine.IndexOf('='))).TrimStart('='))</SecondArgument>
+        </PropertyGroup>
+
+        <CreateItem
+            Include="$(FirstArgument)"
+            AdditionalMetadata="ReplacementValue=$(SecondArgument)">
+           <Output
+               TaskParameter="Include"
+               ItemName="TemplateTokens"/>
+        </CreateItem>
+    </Target>
+</Project>

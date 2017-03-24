@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project
+    DefaultTargets="Run"
+    ToolsVersion="14.0"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target
+        Name="Run">
+
+        <ItemGroup>
+            <ItemsInFileFirstTime Include="First=1" />
+            <ItemsInFileFirstTime Include="Second=2" />
+        </ItemGroup>
+
+        <MakeDir
+            Condition="!Exists('$(MSBuildThisFileDirectory)bin')"
+            Directories="$(MSBuildThisFileDirectory)bin" />
+        <WriteLinesToFile
+            File="$(MSBuildThisFileDirectory)bin\file1.txt"
+            Lines="@(ItemsInFileFirstTime)"
+            Overwrite="true" />
+    </Target>
+</Project>

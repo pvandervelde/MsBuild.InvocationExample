@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project
+    DefaultTargets="Run"
+    ToolsVersion="11.0"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <ScriptsToInvoke Include="1">
+            <Script>$(MSBuildThisFileDirectory)print-itemgroup.msbuild</Script>
+        </ScriptsToInvoke>
+        <ScriptsToInvoke Include="2">
+            <Script>$(MSBuildThisFileDirectory)get-first.msbuild</Script>
+        </ScriptsToInvoke>
+        <ScriptsToInvoke Include="3">
+            <Script>$(MSBuildThisFileDirectory)print-itemgroup.msbuild</Script>
+        </ScriptsToInvoke>
+        <ScriptsToInvoke Include="4">
+            <Script>$(MSBuildThisFileDirectory)get-second.msbuild</Script>
+        </ScriptsToInvoke>
+        <ScriptsToInvoke Include="5">
+            <Script>$(MSBuildThisFileDirectory)print-itemgroup.msbuild</Script>
+        </ScriptsToInvoke>
+    </ItemGroup>
+
+    <Target
+        Name="Run">
+        <RemoveDir
+            Condition="Exists('$(MSBuildThisFileDirectory)bin')"
+            Directories="$(MSBuildThisFileDirectory)bin" />
+
+        <Message Text="%(ScriptsToInvoke.Identity) - %(ScriptsToInvoke.Script)" />
+        <MsBuild Projects="%(ScriptsToInvoke.Script)" Properties="Index=%(ScriptsToInvoke.Identity)" />
+    </Target>
+</Project>
